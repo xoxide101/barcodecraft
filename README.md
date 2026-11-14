@@ -1,8 +1,32 @@
-# BarCraft
+# BarcodeCraft
 
-**A barcode maker that runs in your browser.**
+**Barcodes for every Craft app, and a barcode maker that runs in your browser.**
 
-BarCraft creates the full supported set of bwip-js symbologies: linear
+BarcodeCraft is two things:
+
+- **The barcode core** (`js/craft-barcode.js`, `window.CraftBarcode`): one engine and one *Insert › Barcode* window that every Craft app carries its own copy of. It makes all 71 barcode types (linear, GS1, QR / 2D, postal, HIBC) as SVG in real millimetres (sharp at any size) or PNG at any DPI, with a white background and the quiet zones scanners need. QR codes are UTF-8, so names with accents read correctly on phones. An app can offer its own information to the window (for example ShiftCraft's people as contact cards), and barcodes saved in the library are there in every app (and in your AccountCraft account when you are logged in).
+- **The BarcodeCraft app** (`index.html`, from the earlier BarCraft): a canvas for barcodes, shapes, text and artwork, exported at 203 / 300 / 600 DPI as PNG, JPG or SVG. It is being rebuilt around the barcode core.
+
+Libraries: [bwip-js](https://github.com/metafloor/bwip-js) (MIT), [qrcode-generator](https://github.com/kazuhikoarase/qrcode-generator) (MIT), [Fabric.js](https://github.com/fabricjs/fabric.js) (MIT), [JsBarcode](https://github.com/lindell/JsBarcode) (MIT); fonts in `fonts/` under their own licences.
+
+## The barcode core in an app
+
+```html
+<script src="lib/bwip-js-min.js"></script>
+<script src="lib/qrcode.min.js"></script>
+<script src="js/craft-barcode.js"></script>
+```
+
+```js
+const m = CraftBarcode.make({ type: 'QRCODE', value: 'https://example.com', wmm: 30 }); // { svg, wmm, hmm, … }
+const png = await CraftBarcode.png(m, 300);                                           // a PNG Blob at 300 DPI
+CraftBarcode.addSource('People', () => [{ label: 'Ava (contact card)', value: CraftBarcode.vcard({ name: 'Ava Kim', phone: '555-0101' }), type: 'QRCODE' }]);
+CraftBarcode.open({ app: 'MyApp', onInsert: (m) => { /* put m.svg on the page */ } });
+```
+
+## The app (BarCraft until 2026-11-14)
+
+BarcodeCraft creates the full supported set of bwip-js symbologies: linear
 barcodes, GS1 codes, 2D / QR codes, postal barcodes and HIBC variants.
 Barcodes are drawn as exact vector bars so they never blur, then exported at
 203 / 300 / 600 DPI as PNG, JPG or SVG.
@@ -16,7 +40,7 @@ Barcodes are drawn as exact vector bars so they never blur, then exported at
 
 Everything runs offline from this folder.
 
-BarCraft autosaves the current canvas to your browser while you work. When
+BarcodeCraft autosaves the current canvas to your browser while you work. When
 you open `index.html` again, it restores that last autosaved session
 automatically. Use **File > Reopen last used…** or the left-panel
 **Reopen last used…** button if you started a clean sheet and want the
