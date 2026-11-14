@@ -178,10 +178,11 @@
 .cbc .lib{display:flex;flex-direction:column;gap:4px;max-height:160px;overflow:auto;margin-top:6px}.cbc .lib button{text-align:left;display:flex;justify-content:space-between;gap:8px}
 .cbc footer{display:flex;gap:8px;justify-content:flex-end;padding:12px 16px;border-top:1px solid var(--line,#3a3e4c);flex-wrap:wrap}`; document.head.append(s);
   }
-  function open({ app = 'Craft', value, type, onInsert, title = 'Insert a barcode' } = {}) {
+  function open({ app = 'Craft', value, type, entry, onInsert, title = 'Insert a barcode', insertLabel = 'Insert' } = {}) {
     css(); pull();
     document.querySelectorAll('.cbc-back').forEach((x) => x.remove());
     let cur = { type: type || 'QRCODE', value: value != null ? String(value) : '' };
+    if (entry) cur = { ...entry };   // (an entry from the library, to change)
     const t0 = typeOf(cur.type); if (!cur.value) cur.value = t0.sample;
     const back = document.createElement('div'); back.className = 'cbc-back';
     const groups = [...new Set(TYPES.map((t) => t.group))];
@@ -197,7 +198,7 @@
         <div class="prev" data-f="prev"></div><div class="err" data-f="err"></div>
         <div class="dim">Saved barcodes (every Craft app${acct() ? ', and your account' : ''})</div><div class="lib" data-f="lib"></div>
       </div></div>
-      <footer><button type="button" data-a="save" style="margin-right:auto">Save to the library</button><button type="button" data-a="close">Cancel</button><button type="button" class="main" data-a="insert">Insert</button></footer></div>`;
+      <footer><button type="button" data-a="save" style="margin-right:auto">Save to the library</button><button type="button" data-a="close">Cancel</button><button type="button" class="main" data-a="insert">${esc(insertLabel)}</button></footer></div>`;
     document.body.append(back);
     const f = (k) => back.querySelector(`[data-f=${k}]`), close = () => back.remove();
     const sizeFor = (t) => (t.kind === '2d' ? { wmm: 30, hmm: 30 } : { wmm: 50, hmm: 20 });
@@ -220,7 +221,7 @@
       const a = e.target.closest('[data-a]'); if (!a) return;
       if (a.dataset.a === 'close') close();
       if (a.dataset.a === 'save' && made) { const name = prompt('A name for this barcode in the library:', made.value.split(/\r?\n/).find((l) => /^FN:/.test(l))?.slice(3) || made.value.slice(0, 40)); if (name != null) { save({ ...made, name: name.trim() || made.value }); libDraw(); } }
-      if (a.dataset.a === 'insert' && made) { close(); if (onInsert) onInsert(made); }
+      if (a.dataset.a === 'insert' && made) { close(); if (onInsert) onInsert(entry ? { ...made, id: entry.id, name: entry.name } : made); }
     });
     document.addEventListener('keydown', function k(e) { if (e.key === 'Escape') { close(); document.removeEventListener('keydown', k); } });
     window.addEventListener('craft-barcodes', function again() { if (!document.body.contains(back)) return window.removeEventListener('craft-barcodes', again); libDraw(); });

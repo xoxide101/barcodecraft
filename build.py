@@ -1,6 +1,6 @@
 """Builds BarCraft from barcraft.src.html.
 
-  index.html          standalone app, loads the libraries from lib/
+  designer.html       the Sheet designer (canvas editor), loads the libraries from lib/
                       (works offline)
   dist/artifact.html  page fragment for publishing as an artifact (libraries from cdnjs)
 
@@ -31,7 +31,7 @@ standalone = (
     '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
     + head.strip() + '\n</head>\n<body>\n<div class="app">' + rest + '</body>\n</html>\n'
 )
-(root / "index.html").write_text(standalone, encoding="utf-8")
+(root / "designer.html").write_text(standalone, encoding="utf-8")
 (root / "dist").mkdir(exist_ok=True)
 (root / "dist" / "artifact.html").write_text(page, encoding="utf-8")
-print("Built index.html and dist/artifact.html")
+print("Built designer.html and dist/artifact.html")
