@@ -5,3 +5,17 @@
 - Tested in headless Chrome: all 71 types draw with their samples; the window's From list filled a contact card and Insert returned it; a contact QR for "Zoë Ångström" read back exactly by OpenCV at 40 and 60 mm, 300 and 600 DPI, error correction L and M.
 - Next: the app page rebuilt around the core (library, one or many, print sheets, the Craft title bar, Log in, AI settings), then Insert › Barcode in each app (LabelCraft, PressCraft, ShiftCraft first).
 - 2026-11-14: the app rebuilt around the core. `index.html` (no build step): the Craft title bar and ribbon (js/craft-titlebar.js, ClipArtCraft's copy), Log in (craft-account.js + craft-crypto.js), three views: **Library** (find, tiles with preview, Change (the core's window, Save), PNG at 300 DPI, SVG, Copy (clipboard, https or this computer), delete; click to choose, double-click to change; Save / Open library file `*.barcodecraft.json`), **Make many** (one a line, or name, value; kind, size, text; live tiles with the ones that cannot be made in red; Save all to the library; Print them as a sheet), **Print** (the whole library, the chosen ones or the Make many list; copies; Letter / Legal / A4 / Tabloid; across × down, margin, gap; names; cutting lines; pages as SVG in mm, printed at their paper size with @page, or saved as SVG pages). BarCraft's canvas editor is now `designer.html` (build.py writes it from barcraft.src.html), opened from Library › Sheet designer. Tested with real clicks in headless Chrome: a QR saved through the window, 4 from Make many, a sheet of 5 on Letter; no errors.
+
+## Apps with their own copy of the core (2026-11-14)
+Each app keeps its own copy of `js/craft-barcode.js` (and of bwip-js and qrcode-generator), as every Craft app does with shared parts. A fix to the core here is copied to them only when asked.
+
+| App | Where | What it does with a barcode |
+| --- | --- | --- |
+| LabelCraft | inline in `labelcraft.src.html` | Insert › Barcode library: 600 DPI picture at real mm |
+| PressCraft | `js/`, `lib/` | Insert › Barcode (ribbon and menu): 600 DPI picture at real mm |
+| LogoCraft | `js/`, `lib/` | Insert › Barcode (ribbon and menu): 600 DPI picture at real mm |
+| SiteCraft | `js/` (inlined into the artifact) | Insert › Barcode: SVG picture sized in mm with CSS |
+| ImageCraft | `js/`, `lib/` | File › Barcode: opens as a 300 DPI picture to work on |
+| 3DCraft | `js/`, `lib/` | Insert › Barcode to 3D: 600 DPI picture into Picture to 3D |
+| DataCraft | `app/js/`, `app/lib/` | Pages: Barcode element with `{fields}` (one code per record); Barcode… in image boxes |
+| ShiftCraft | none (its own qrcode-generator) | Contact cards › Add to barcode library (pushes each person's contact QR in) |
