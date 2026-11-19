@@ -181,17 +181,19 @@
   function css() {
     if (document.getElementById('cbc-css')) return;
     const s = document.createElement('style'); s.id = 'cbc-css'; s.textContent = `
-.cbc-back{position:fixed;inset:0;background:rgba(0,0,0,.5);display:grid;place-items:center;z-index:9999;padding:16px}
-.cbc{background:var(--panel,#1f2129);color:var(--text,var(--fg,#e8e9ee));border:1px solid var(--line,#3a3e4c);border-radius:12px;width:min(900px,100%);max-height:92vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.5);font:14px/1.45 "Segoe UI",system-ui,sans-serif}
+.cbc-back{position:fixed;inset:0;background:rgba(0,0,0,.5);display:grid;place-items:center;z-index:9999;padding:16px;overscroll-behavior:contain}
+.cbc{background:var(--panel,#1f2129);color:var(--text,var(--fg,#e8e9ee));border:1px solid var(--line,#3a3e4c);border-radius:12px;width:min(900px,100%);max-height:92vh;max-height:92dvh;min-height:0;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.5);font:14px/1.45 "Segoe UI",system-ui,sans-serif}
 .cbc header{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line,#3a3e4c)}.cbc header b{font-size:16px}
-.cbc .body{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:14px 16px;overflow:auto}@media(max-width:700px){.cbc .body{grid-template-columns:1fr}}
+.cbc .body{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:14px 16px;overflow:auto;min-height:0;flex:1 1 auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y}@media(max-width:700px){.cbc .body{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:520px){.cbc-back{padding:6px}.cbc{border-radius:10px;max-height:98vh;max-height:98dvh}.cbc header,.cbc footer{padding:10px 12px}.cbc .body{padding:10px 12px;gap:10px}.cbc .prev{min-height:120px}.cbc footer button{flex:1 1 auto}.cbc input,.cbc select,.cbc textarea{font-size:16px}}
+@media(pointer:coarse){.cbc button,.cbc select,.cbc input{min-height:40px}}
 .cbc label{display:grid;gap:3px;margin:0 0 9px}.cbc .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .cbc input,.cbc select,.cbc textarea{padding:6px 8px;border-radius:7px;border:1px solid var(--line,#3a3e4c);background:var(--panel-2,var(--bg,#2a2d38));color:inherit;font:inherit;width:100%;box-sizing:border-box}
 .cbc button{padding:6px 12px;border-radius:7px;border:1px solid var(--line,#3a3e4c);background:var(--panel-2,transparent);color:inherit;font:inherit;cursor:pointer}
 .cbc button.main{background:var(--accent,#2f6fdd);border-color:var(--accent,#2f6fdd);color:#fff}
 .cbc .prev{background:#fff;border-radius:8px;min-height:180px;display:grid;place-items:center;padding:12px}.cbc .prev img{max-width:100%;max-height:260px}
 .cbc .err{color:#f87171;min-height:1.4em}.cbc .dim{color:var(--muted,var(--dim,#9aa0b0));font-size:12.5px}
-.cbc .lib{display:flex;flex-direction:column;gap:4px;max-height:160px;overflow:auto;margin-top:6px}.cbc .lib button{text-align:left;display:flex;justify-content:space-between;gap:8px}
+.cbc .lib{display:flex;flex-direction:column;gap:4px;max-height:160px;overflow:auto;margin-top:6px;overscroll-behavior:contain;touch-action:pan-y}.cbc .lib button{text-align:left;display:flex;justify-content:space-between;gap:8px}
 .cbc footer{display:flex;gap:8px;justify-content:flex-end;padding:12px 16px;border-top:1px solid var(--line,#3a3e4c);flex-wrap:wrap}`; document.head.append(s);
   }
   function open({ app = 'Craft', value, type, entry, onInsert, title = 'Insert a barcode', insertLabel = 'Insert' } = {}) {
