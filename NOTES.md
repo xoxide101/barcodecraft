@@ -19,3 +19,4 @@ Each app keeps its own copy of `js/craft-barcode.js` (and of bwip-js and qrcode-
 | 3DCraft | `js/`, `lib/` | Insert › Barcode to 3D: 600 DPI picture into Picture to 3D |
 | DataCraft | `app/js/`, `app/lib/` | Pages: Barcode element with `{fields}` (one code per record); Barcode… in image boxes |
 | ShiftCraft | none (its own qrcode-generator) | Contact cards › Add to barcode library (pushes each person's contact QR in) |
+- 2026-11-18 The Craft apps bar (craft-rail.js, a copy in each app; the master in AccountCraft): a slim bar down the left: top = the unified apps (one account, saved on the server: AccountCraft, ShiftCraft, ICalCraft, ClipArtCraft, ImageCraft, BarcodeCraft), bottom = the other apps. The app you are in is marked; a click goes to that app (sending 'craft-leave' first); logged in on a web address it shows only the apps on that site your account may use. Folds to a thin edge (remembered). Not printed.
