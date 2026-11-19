@@ -81,6 +81,7 @@
   function edit(e) { B.open({ app: 'BarcodeCraft', title: 'Change this barcode', entry: e, insertLabel: 'Save', onInsert: (m) => { B.save({ ...m, id: e.id, name: e.name }); toast('Saved.'); draw(); } }); }
   async function savePng(e, dpi = pref.dpi || 300) { const m = made(e); if (m.error) return toast(m.error); download(await B.png(m, dpi), `${safeName(e.name)}.png`); }
   function saveSvg(e) { const m = made(e); if (m.error) return toast(m.error); download(new Blob([m.svg], { type: 'image/svg+xml' }), `${safeName(e.name)}.svg`); }
+  function keepPic(e) { const m = made(e); if (m.error) return toast(m.error); CraftClipartPicker.keepAsk({ name: e.name, from: 'BarcodeCraft', svg: async () => new Blob([m.svg], { type: 'image/svg+xml' }), png: () => B.png(m, pref.dpi || 300) }).then((p) => { if (p && p.id) toast('Kept in My pictures: any Craft app has it under Clip art › My pictures.'); }); }
   async function copyPic(e) {
     const m = made(e); if (m.error) return toast(m.error);
     if (!navigator.clipboard || !window.ClipboardItem || !window.isSecureContext) return toast('Copying a picture needs https or this computer’s own address: use PNG instead.');
@@ -106,11 +107,11 @@
     list.forEach((e) => {
       const m = made(e), t = document.createElement('div'); t.className = 'tile' + (chosen.has(e.id) ? ' on' : ''); t.title = e.value;
       t.innerHTML = `<div class="pic">${m.error ? `<span class="bad">${esc(m.error)}</span>` : `<img alt="" src="${svgUrl(m.svg)}">`}</div><div class="nm">${esc(e.name)}</div><div class="ty">${esc(typeName(e.type))} · ${m.wmm || e.wmm} × ${m.hmm || e.hmm} mm</div>
-        <div class="acts"><button data-a="edit">Change</button><button data-a="png">PNG</button><button data-a="svg">SVG</button><button data-a="copy">Copy</button><button data-a="del" title="Delete">✕</button></div>`;
+        <div class="acts"><button data-a="edit">Change</button><button data-a="png">PNG</button><button data-a="svg">SVG</button><button data-a="copy">Copy</button>${window.CraftClipartPicker && CraftClipartPicker.keep ? '<button data-a="keep" title="Keep it in My pictures: any Craft app has it under Clip art › My pictures">Keep</button>' : ''}<button data-a="del" title="Delete">✕</button></div>`;
       t.addEventListener('click', (ev) => {
         const a = ev.target.closest('[data-a]');
         if (!a) { if (chosen.has(e.id)) chosen.delete(e.id); else chosen.add(e.id); t.classList.toggle('on'); return; }
-        ({ edit: () => edit(e), png: () => savePng(e), svg: () => saveSvg(e), copy: () => copyPic(e), del: () => removeChosen([e]) })[a.dataset.a]();
+        ({ edit: () => edit(e), png: () => savePng(e), svg: () => saveSvg(e), copy: () => copyPic(e), keep: () => keepPic(e), del: () => removeChosen([e]) })[a.dataset.a]();
       });
       t.addEventListener('dblclick', (ev) => { if (!ev.target.closest('[data-a]')) edit(e); });
       grid.append(t);
