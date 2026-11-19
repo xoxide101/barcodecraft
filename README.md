@@ -155,6 +155,11 @@ Linear barcodes with human-readable text can use every font in the local
   `Ctrl+{` / `Ctrl+}` send them to the back / front
 - `+` / `-` zoom in / out, `0` fit to window, `Esc` clear selection
 
+## The Craft apps bar
+
+A slim bar on the left goes to the other Craft apps (the ones sharing one account at the top). It folds away to a thin
+edge, and is left out of printouts.
+
 ## How it is built
 
 - Source: `barcraft.src.html` (HTML, CSS and JavaScript in one file).
