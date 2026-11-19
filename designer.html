@@ -513,6 +513,8 @@
 <script src="lib/JsBarcode.all.min.js"></script>
 <script src="lib/qrcode.min.js"></script>
 <script src="lib/bwip-js-min.js"></script>
+<script src="js/craft-account.js"></script>
+<script src="js/clipart-picker.js"></script>
 <script>
 (async function () {
   'use strict';
@@ -1507,6 +1509,7 @@
   function openArtworkDialog(onUse) {
     openModal('<h3>Insert artwork</h3>'
       + '<p class="hint">Import SVG, PNG, JPG, WebP, GIF, BMP or another image. You can also use a ClipArtCraft image URL.</p>'
+      + (window.CraftClipartPicker ? '<button class="btn" id="art-clip" style="width:100%;margin-bottom:6px">From clip art…</button>' : '')
       + '<button class="btn" id="art-file" style="width:100%">Choose image file…</button>'
       + '<label class="field" style="margin-top:10px"><span>Image URL / ClipArtCraft link</span><input id="art-url" class="input" placeholder="https://…"></label>'
       + '<div class="modal-btns"><button class="btn" id="art-cancel">Cancel</button><button class="btn primary" id="art-go">Load image</button></div>');
@@ -1517,6 +1520,7 @@
       i.onchange = async () => { const f = i.files && i.files[0]; if (!f) return; closeModal(); await addArtworkFile(f, onUse); };
       i.click();
     };
+    if ($('art-clip')) $('art-clip').onclick = () => { closeModal(); window.CraftClipartPicker.open({ app: 'BarcodeCraft', svg: true, onPick: (p) => addArtworkFile(p.file, onUse) }); };
     $('art-cancel').onclick = closeModal;
     $('art-go').onclick = async () => {
       const url = $('art-url').value.trim();
