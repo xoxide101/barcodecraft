@@ -1,0 +1,9 @@
+{
+ "name": "BarcodeCraft",
+ "icon": "▥",
+ "about": "Barcodes and QR codes",
+ "group": "Make and design",
+ "order": 60,
+ "entry": "index.html",
+ "status": "beta"
+}
